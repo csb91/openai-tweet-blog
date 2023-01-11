@@ -10,10 +10,6 @@ const readline = createInterface({
   input: process.stdin,
   output: process.stdout
 });
-// const readline = require('readline').createInterface({
-//   input: process.stdin,
-//   output: process.stdout
-// });
 
 
 // The code below sets the consumer key and consumer secret from your environment variables
@@ -27,7 +23,7 @@ const consumer_secret = process.env.CONSUMER_SECRET;
 // Be sure to add replace the text of the with the text you wish to Tweet.
 // You can also add parameters to post polls, quote Tweets, Tweet with reply settings, and Tweet to Super Followers in addition to other features.
 const data = {
-  "text": "Hello world!"
+  "text": "Do I need a new PIN for every tweet?"
 };
 
 const endpointURL = `https://api.twitter.com/2/tweets`;

@@ -2,9 +2,16 @@ import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import axios from 'axios';
 import './App.css'
+import Form from './Form'
 
 function App() {
   const [count, setCount] = useState(0)
+
+  const test = axios.post('http://localhost:3000/new', {
+    "prompt": "Create 10 viral tweets about react, make some of them contain polls in twitter format"
+  })
+  .then(res => {console.log(res)})
+  .catch(err => {console.log(err)})
 
   return (
     <div className="App">
@@ -18,7 +25,7 @@ function App() {
       </div>
       <h1>Vite + React</h1>
       <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
+        <button onClick={() => {setCount((count) => count + 1); test;}}>
           count is {count}
         </button>
         <p>
@@ -28,6 +35,7 @@ function App() {
       <p className="read-the-docs">
         Click on the Vite and React logos to learn more
       </p>
+      <Form />
     </div>
   )
 }
