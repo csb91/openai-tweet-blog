@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react'
 
-export default function TweetCard ({ tweet }) {
+export default function TweetCard({ tweet }) {
 
   return (
     <>

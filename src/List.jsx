@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import TweetCard from './TweetCard'
 
-export default function List ({ tweets }) {
+export default function List({ tweets }) {
 
   return (
     <>

@@ -28,15 +28,15 @@ app.get('/all', (req, res) => {
 
 app.post('/generate', (req, res) => {
   console.log(req.body)
-  let model = "text-davinci-003";
-  let prompt = "No, going forward can you remember my prompts and the responses you give?";
-  let temperature = 0.5;
-  let max_tokens = 300;
+  let model = req.body.model;
+  let prompt = req.body.prompt;
+  let temperature = req.body.temperature;
+  let max_tokens = req.body.max_tokens;
   const response = openai.createCompletion({
     model,
     prompt,
     temperature,
-    max_tokens,
+    max_tokens
   })
   .then(results => {res.send(results.data.choices)})
   .catch(err => res.statusCode(500).send(err))
@@ -49,3 +49,17 @@ app.post('/createTweet', (req, res) => {
 app.listen(process.env.PORT, () => {
   console.log(`App listening on port ${process.env.PORT}`)
 })
+
+
+
+//Specify format of tweets
+//Specify number of tweets
+//Give me x tweets in x format
+
+// "
+
+// 1. 🤩 Check out Vue.js for your next project and make development easier - 💻#Vuejs #Programming #webdevelopment 🚀
+// 2. 🤑 Build dynamic user interfaces with Vue.js - 🔌 #Vuejs #UI #WebDevelopment 🚀
+// 3. 🤯 Ready to take your JavaScript skills to a whole new level? Vue.js is the way to go! 💰 #Vuejs #JavaScript #WebDevelopment 💻
+// 4. ✨ Vue.js is the best way to create dynamic web pages with ease - 🤖 #Vuejs #Programming #WebDevelopment 🚀
+// 5. 🔥 Vue.js is making waves with its reactive, declarative approach - 💥 #Vuejs #React #WebDevelopment 🚀"

@@ -9,25 +9,21 @@ export default function App() {
   const [count, setCount] = useState(0)
   const [tweets, setTweets] = useState(['hi', 'hi', 'hi'])
 
-  // const test = axios.post('http://localhost:3000/generate', {
-  //   "prompt": "Create 10 viral tweets about react, make some of them contain polls in twitter format"
-  // })
-  // .then(res => {console.log(res)})
-  // .catch(err => {console.log(err)})
-
   useEffect(() => {
     axios.get('http://localhost:3000/all')
     .then(res => {console.log('get', res)})
+    .catch(err => {console.log(err)})
   }, [tweets])
 
   return (
     <div className="App">
       <h1>ChatGPT + Twitter</h1>
-      <Form />
-      <div className="card">
-
+      <div>
+        <Form />
       </div>
-      <List tweets={tweets}/>
+      <div className='listContainer'>
+        <List tweets={tweets}/>
+      </div>
     </div>
   )
 }
