@@ -1,6 +1,6 @@
-import Twit from 'twit';
 import { config } from 'dotenv';
 config();
+import Twit from 'twit';
 
 let T = new Twit({
   consumer_key: process.env.CONSUMER_KEY,
@@ -10,11 +10,7 @@ let T = new Twit({
 });
 
 let tweet = {
-  status: '🤔',
-  poll_fields: {
-  options: ['Red','Blue','Green'],
-  duration_minutes: 1440
-  }
+  status: 'This is turning out to be harder than I expected.'
 };
 
 T.post('statuses/update', tweet)
