@@ -20,6 +20,7 @@ export default function Form() {
   const [test, setTest] = useState([]);
   const [temperature, setTemperature] = useState('');
   const [maxTokens, setMaxTokens] = useState('');
+  const [numberTweets, setNumberTweets] = useState('');
   const [loader, setLoader] = useState(0);
 
   const handleTempChange = (e) => {
@@ -32,9 +33,18 @@ export default function Form() {
   }
 
   const handleTokenChange = (e) => {
-    const newMax = e.target.value;
+    const newMax = Math.round(e.target.value);
     if (newMax >= 0 && newMax <= 4096) {
       setMaxTokens(newMax)
+    } else {
+      alert('Out of Range')
+    }
+  }
+
+  const handleNumberTweetsChange = (e) => {
+    const newNumTweets = Math.round(e.target.value);
+    if (newNumTweets >= 0 && newNumTweets <= 30) {
+      setNumberTweets(newNumTweets)
     } else {
       alert('Out of Range')
     }
@@ -46,9 +56,8 @@ export default function Form() {
     let temp = Number(temperature)
     let max_tokens = Number(maxTokens)
     let prompt = e.target.elements.prompt.value
-    console.log(model.length)
 
-    if (temperature.length >= 1 && maxTokens.length >= 1 && e.target.elements.model.value.length > 1 && e.target.elements.prompt.value.length >= 15) {
+    if (temp && maxTokens && e.target.elements.model.value.length > 1 && e.target.elements.prompt.value.length >= 15) {
       setLoader(1);
       axios.post('http://localhost:3000/generate', {
         'model': model,
@@ -56,10 +65,10 @@ export default function Form() {
         'temperature': temp,
         'max_tokens': max_tokens
       })
-      //stop Loader
       .then(res => {
         setLoader(0);
-        console.log(res)})
+        console.log(res)
+      })
       .catch(err => {console.log(err)})
     } else {
       alert('Please Check Input Minimum Requirements')
@@ -115,6 +124,15 @@ export default function Form() {
           helperText="Please select the max characters in the response"
           value={maxTokens}
           onChange={handleTokenChange}
+        >
+        </TextField>
+        <TextField
+          id="max_tokens"
+          name="max_tokens"
+          label="Input Number from 0 to 30"
+          helperText="Please select the number of tweets to generate"
+          value={numberTweets}
+          onChange={handleNumberTweetsChange}
         >
         </TextField>
       </div>

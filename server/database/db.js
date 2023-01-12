@@ -8,9 +8,16 @@ const connectToDb = async () => {
   .catch((err) => console.log(err))
 
   const tweetSchema = new mongoose.Schema({
-    tweetId: String,
+    tweetId: {
+      type: String,
+      default: ''
+    },
     tweet: String,
-    date: Date
+    created_date: Date,
+    tweet_date: {
+      type: String,
+      default: ''
+    }
   })
 
   const Tweet = mongoose.model('tweet', tweetSchema)

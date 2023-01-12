@@ -11,7 +11,7 @@ export default function App() {
 
   useEffect(() => {
     axios.get('http://localhost:3000/all')
-    .then(res => {console.log('get', res)})
+    .then(res => {console.log('get', res.data)})
     .catch(err => {console.log(err)})
   }, [tweets])
 
