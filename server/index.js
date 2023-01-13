@@ -30,7 +30,10 @@ app.get('/all', (req, res) => {
 app.post('/generate', (req, res) => {
   console.log(req.body)
   let model = req.body.model;
-  let prompt = req.body.prompt;
+  let prompt =
+    ```
+    Generate
+    ```
   let temperature = req.body.temperature;
   let max_tokens = req.body.max_tokens;
   const response = openai.createCompletion({

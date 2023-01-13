@@ -16,7 +16,7 @@ const model = [
   }
 ]
 
-export default function Form() {
+export default function ChatGPTForm() {
   const [test, setTest] = useState([]);
   const [temperature, setTemperature] = useState('');
   const [maxTokens, setMaxTokens] = useState('');
@@ -143,7 +143,7 @@ export default function Form() {
           label="Input Prompt"
           multiline
           rows={5}
-          helperText="Enter prompt here, minimum of 15 characters to prevent accidental submission"
+          helperText="Enter prompt here, minimum of 15 characters"
           variant="standard"
         />
       </div>

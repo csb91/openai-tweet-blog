@@ -2,27 +2,31 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import axios from 'axios';
 import './App.css'
-import Form from './Form'
-import List from './List'
+import ChatGPTForm from './ChatGPTForm'
+import TweetList from './TweetList'
 
 export default function App() {
   const [count, setCount] = useState(0)
-  const [tweets, setTweets] = useState(['hi', 'hi', 'hi'])
+  const [tweets, setTweets] = useState([])
 
   useEffect(() => {
     axios.get('http://localhost:3000/all')
-    .then(res => {console.log('get', res.data)})
+    .then(res => {
+      //console.log(res.data)
+      setTweets(res.data)
+    })
     .catch(err => {console.log(err)})
-  }, [tweets])
+  }, [])
 
+  console.log(tweets)
   return (
     <div className="App">
       <h1>ChatGPT + Twitter</h1>
       <div>
-        <Form />
+        <ChatGPTForm />
       </div>
       <div className='listContainer'>
-        <List tweets={tweets}/>
+        <TweetList tweets={tweets}/>
       </div>
     </div>
   )
