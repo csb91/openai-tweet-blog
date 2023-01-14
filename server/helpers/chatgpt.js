@@ -13,5 +13,3 @@ const gptResponse = await openai.createCompletion({
   temperature: 1,
   max_tokens: 200,
 })
-
-export default gptResponse;

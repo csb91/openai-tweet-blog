@@ -69,7 +69,7 @@ export default function ChatGPTForm() {
       })
       .then(res => {
         setLoader(0);
-        console.log(res);
+        console.log(res.data);
       })
       .catch(err => {console.log(err)})
     } else {

@@ -12,7 +12,6 @@ export default function App() {
   useEffect(() => {
     axios.get('http://localhost:3000/all')
     .then(res => {
-      //console.log(res.data)
       setTweets(res.data)
     })
     .catch(err => {console.log(err)})
@@ -23,7 +22,7 @@ export default function App() {
     <div className="App">
       <h1>ChatGPT + Twitter</h1>
       <div>
-        <ChatGPTForm />
+        <ChatGPTForm tweets={tweets}/>
       </div>
       <div className='listContainer'>
         <TweetList tweets={tweets}/>

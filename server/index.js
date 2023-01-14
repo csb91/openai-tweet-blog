@@ -7,18 +7,14 @@ import Tweet from './database/models/tweets.js';
 import { generateTweets, sendTweet, getAllTweets } from './database/controllers/controllers.js'
 const app = express();
 
-connectToDb();
+await connectToDb();
 
-app.use(cors())
+app.use(cors());
 app.use(express.json());
 
-Tweet.create({tweet:'Hello World!', created_date: new Date()})
-//tweet.find().then(res => {console.log(res)})
-
-app.get('/all', getAllTweets)
-
-app.post('/generate', generateTweets)
-app.post('/createTweet', sendTweet)
+app.get('/all', getAllTweets);
+app.post('/generate', generateTweets);
+app.post('/createTweet', sendTweet);
 
 app.listen(process.env.PORT, () => {
   console.log(`App listening on port ${process.env.PORT}`)

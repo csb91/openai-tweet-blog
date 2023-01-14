@@ -1,7 +1,7 @@
 import { config } from 'dotenv';
 config();
-import Tweets from '../models/tweets.js';
 import { Configuration, OpenAIApi } from 'openai';
+import Twit from 'twit';
 import encodeEmojis from '../../helpers/emoji_encode.js';
 import Tweet from '../../database/models/tweets.js';
 
@@ -14,6 +14,7 @@ export const generateTweets = (req, res) => {
   console.log(req.body)
   let model = req.body.model;
   //Need to tweak the prompt model
+  //Could pass the current tweet list in the request and pass that into the promt as well to let model know those have already been tweeted
   let prompt =
     `
     Generate ${req.body.numberTweets} tweets using this prompt: ${req.body.prompt},
@@ -24,19 +25,38 @@ export const generateTweets = (req, res) => {
     `
   let temperature = req.body.temperature;
   let max_tokens = req.body.max_tokens;
+
   const response = openai.createCompletion({
     model,
     prompt,
     temperature,
     max_tokens
   })
-  .then(results => results.data.choices[0].text.slice(1).split('\n')) //This is where to find tweets
+  .then(results => results.data.choices[0].text.slice(1).split('\n'))
   .then(tweetArray => {
-    tweetArray.forEach(item => {
-      console.log(item.slice(3))
-    })
+    let promises = tweetArray.map(item => {
+      return new Promise((resolve, reject) => {
+        Tweet.find({tweet: encodeEmojis(item.slice(3))})
+        .then((result) => {
+          if (!result.length) {
+            Tweet.create({
+              tweet: item.slice(3),
+              created_date: new Date()
+            })
+            .then(resolve)
+            .catch(reject)
+          }
+          else {
+            resolve();
+          }
+        })
+        .catch(reject)
+      })
+    });
+    return Promise.all(promises)
   })
-  .then(results => res.send(results.data.choices)) //Need to access database after this line and add tweets to db, decoding emojis
+  .then(() => {return Tweet.find()})
+  .then(dbTweets => res.send(dbTweets))
   .catch(err => res.send(err))
 }
 
@@ -47,13 +67,10 @@ export const sendTweet = (req, res) => {
 }
 
 export const getAllTweets = (req, res) => {
-  tweetDb.find()
+  Tweet.find()
   .then(results => res.send(results))
   .catch(err => res.statusCode(500).send(err))
 }
-
-
-console.log(encodeEmojis('1. JavaScript developers are the real MVPs – 🏆🎉'))
 
 
 // 1. 🤩 Check out Vue.js for your next project and make development easier - 💻#Vuejs #Programming #webdevelopment 🚀

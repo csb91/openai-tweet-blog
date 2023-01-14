@@ -18,7 +18,7 @@ export default function TweetCard({ tweet }) {
   return (
     <>
     <ListItem sx={{border:'1px solid grey', width:'60vw', minHeight:'7em', marginBottom: '1em', borderRadius: '8px', overflow: 'hidden' }}>
-        <ListItemText primary={"🔥 Vue.js is making waves with its reactive, declarative approach - 💥 #Vuejs #React #WebDevelopment 🚀"} />
+        <ListItemText primary={tweet.tweet} />
         <ListItemIcon>
           {!tweetSent &&
             <TwitterIcon sx={{paddingRight: '1em', paddingLeft: '3em', '&:hover': {color: 'blue'}}} onClick={sendTweet}/>
