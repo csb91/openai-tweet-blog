@@ -14,5 +14,14 @@ let tweet = {
 };
 
 T.post('statuses/update', tweet)
-.catch(err => {console.log(err)})
 .then(res => {console.log(res)})
+.catch(err => {console.log(err)})
+
+
+T.post('statuses/destroy/:id', { id: '343360866131001345' })
+.then(res => {console.log(res)})
+.catch(err => {console.log(err)})
+
+T.post('statuses/retweet/:id', { id: '343360866131001345' })
+.then(res => {console.log(res)})
+.catch(err => {console.log(err)})

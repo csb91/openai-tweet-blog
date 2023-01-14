@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import TextField from '@mui/material/TextField';
 import MenuItem from '@mui/material/MenuItem';
@@ -26,36 +26,37 @@ export default function ChatGPTForm() {
   const handleTempChange = (e) => {
     const newTemp = e.target.value;
     if (newTemp >= 0 && newTemp <= 1) {
-      setTemperature(newTemp)
+      setTemperature(newTemp);
     } else {
-      alert('Out of Range')
+      alert('Out of Range');
     }
   }
 
   const handleTokenChange = (e) => {
     const newMax = Math.round(e.target.value);
     if (newMax >= 0 && newMax <= 4096) {
-      setMaxTokens(newMax)
+      setMaxTokens(newMax);
     } else {
-      alert('Out of Range')
+      alert('Out of Range');
     }
   }
 
   const handleNumberTweetsChange = (e) => {
     const newNumTweets = Math.round(e.target.value);
     if (newNumTweets >= 0 && newNumTweets <= 30) {
-      setNumberTweets(newNumTweets)
+      setNumberTweets(newNumTweets);
     } else {
-      alert('Out of Range')
+      alert('Out of Range');
     }
   }
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    let model = e.target.elements.model.value
-    let temp = Number(temperature)
-    let max_tokens = Number(maxTokens)
-    let prompt = e.target.elements.prompt.value
+    let model = e.target.elements.model.value;
+    let temp = Number(temperature);
+    let max_tokens = Number(maxTokens);
+    let nTweets = Number(numberTweets);
+    let prompt = e.target.elements.prompt.value;
 
     if (temp && maxTokens && e.target.elements.model.value.length > 1 && e.target.elements.prompt.value.length >= 15) {
       setLoader(1);
@@ -63,15 +64,16 @@ export default function ChatGPTForm() {
         'model': model,
         'prompt': prompt,
         'temperature': temp,
-        'max_tokens': max_tokens
+        'max_tokens': max_tokens,
+        'numberTweets': nTweets
       })
       .then(res => {
         setLoader(0);
-        console.log(res)
+        console.log(res);
       })
       .catch(err => {console.log(err)})
     } else {
-      alert('Please Check Input Minimum Requirements')
+      alert('Please Check Input Minimum Requirements');
     }
   }
 
@@ -109,12 +111,6 @@ export default function ChatGPTForm() {
           helperText="Please select the randomness of the response, 0 = conservative & 1.0 = creative"
           value={temperature}
           onChange={handleTempChange}
-          // inputProps={{
-          //   step: 0.05,
-          //   min: 0,
-          //   max: 1.0,
-          //   type: "number"
-          // }}
         >
         </TextField>
         <TextField
