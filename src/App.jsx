@@ -20,12 +20,12 @@ export default function App() {
   console.log('here', tweets)
   return (
     <div className="App">
-      <h1>ChatGPT + Twitter</h1>
+      <h1>OpenAI + Twitter</h1>
       <div>
-        <ChatGPTForm tweets={tweets}/>
+        <ChatGPTForm tweets={tweets} setTweets={setTweets} />
       </div>
       <div className='listContainer'>
-        <TweetList tweets={tweets}/>
+        <TweetList tweets={tweets} />
       </div>
     </div>
   )

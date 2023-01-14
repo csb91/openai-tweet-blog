@@ -16,7 +16,7 @@ const model = [
   }
 ]
 
-export default function ChatGPTForm() {
+export default function ChatGPTForm({ tweets }) {
   const [test, setTest] = useState([]);
   const [temperature, setTemperature] = useState('');
   const [maxTokens, setMaxTokens] = useState('');
