@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
 import TwitterIcon from '@mui/icons-material/Twitter';
 import DeleteIcon from '@mui/icons-material/Delete';
 import VerifiedIcon from '@mui/icons-material/Verified';
@@ -14,7 +15,7 @@ export default function TweetCard({ tweet }) {
   const sendTweet = () => {
     setTweetSent(!tweetSent)
     axios.post('http://localhost:3000/createTweet', {
-      
+      'tweet': tweet
     })
   }
 

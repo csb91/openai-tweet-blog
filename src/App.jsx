@@ -1,9 +1,9 @@
-import { useState, useEffect } from 'react'
-import reactLogo from './assets/react.svg'
+import { useState, useEffect } from 'react';
+import reactLogo from './assets/react.svg';
 import axios from 'axios';
-import './App.css'
-import OpenAIForm from './OpenAIForm'
-import TweetList from './TweetList'
+import './App.css';
+import OpenAIForm from './OpenAIForm';
+import TweetList from './TweetList';
 
 export default function App() {
   const [count, setCount] = useState(0)

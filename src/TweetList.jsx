@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 import List from '@mui/material/List';
-import TweetCard from './TweetCard'
+import TweetCard from './TweetCard';
 
 
 export default function tweetList({ tweets }) {

@@ -12,7 +12,14 @@ let T = new Twit({
 
 export const sendTweet = (req, res) => {
   //Need to get tweet info from req, create tweet, then update db
-  //tweetDb.create({tweetId: '1', tweet:'Hello World!', date: new Date()})
+  console.log(req.body)
+  let tweet = {status: req.body.tweet.tweet}
+
+  T.post('statuses/update', tweet)
+  .then(res => {console.log(res)})
+  .catch(err => {console.log(err)})
+
+  //Now after tweet has been sent need to update the tweetId and tweet date in the DB
   //tweetDb.findOneAndUpdate({_id: "63c053fce95de8ac430ec6e2"}, {$set:{tweetId: '3'}}).catch(err => {console.log(err)})
 }
 
@@ -21,3 +28,16 @@ export const getAllTweets = (req, res) => {
   .then(results => res.send(results))
   .catch(err => res.statusCode(500).send(err))
 }
+
+// T.post('statuses/update', tweet)
+// .then(res => {console.log(res)})
+// .catch(err => {console.log(err)})
+
+
+// T.post('statuses/destroy/:id', { id: '343360866131001345' })
+// .then(res => {console.log(res)})
+// .catch(err => {console.log(err)})
+
+// T.post('statuses/retweet/:id', { id: '343360866131001345' })
+// .then(res => {console.log(res)})
+// .catch(err => {console.log(err)})
