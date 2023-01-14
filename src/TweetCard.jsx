@@ -13,6 +13,9 @@ export default function TweetCard({ tweet }) {
 
   const sendTweet = () => {
     setTweetSent(!tweetSent)
+    axios.post('http://localhost:3000/createTweet', {
+      
+    })
   }
 
   return (

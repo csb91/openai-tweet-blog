@@ -1,7 +1,6 @@
 import { config } from 'dotenv';
 config();
 import { Configuration, OpenAIApi } from 'openai';
-import Twit from 'twit';
 import encodeEmojis from '../../helpers/emoji_encode.js';
 import Tweet from '../../database/models/tweets.js';
 
@@ -60,17 +59,6 @@ export const generateTweets = (req, res) => {
   .catch(err => res.send(err))
 }
 
-export const sendTweet = (req, res) => {
-  //Need to get tweet info from req, create tweet, then update db
-  //tweetDb.create({tweetId: '1', tweet:'Hello World!', date: new Date()})
-  //tweetDb.findOneAndUpdate({_id: "63c053fce95de8ac430ec6e2"}, {$set:{tweetId: '3'}}).catch(err => {console.log(err)})
-}
-
-export const getAllTweets = (req, res) => {
-  Tweet.find()
-  .then(results => res.send(results))
-  .catch(err => res.statusCode(500).send(err))
-}
 
 
 // 1. 🤩 Check out Vue.js for your next project and make development easier - 💻#Vuejs #Programming #webdevelopment 🚀

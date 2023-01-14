@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import reactLogo from './assets/react.svg'
 import axios from 'axios';
 import './App.css'
-import ChatGPTForm from './ChatGPTForm'
+import OpenAIForm from './OpenAIForm'
 import TweetList from './TweetList'
 
 export default function App() {
@@ -22,7 +22,7 @@ export default function App() {
     <div className="App">
       <h1>OpenAI + Twitter</h1>
       <div>
-        <ChatGPTForm tweets={tweets} setTweets={setTweets} />
+        <OpenAIForm tweets={tweets} setTweets={setTweets} />
       </div>
       <div className='listContainer'>
         <TweetList tweets={tweets} />

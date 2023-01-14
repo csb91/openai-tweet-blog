@@ -4,7 +4,8 @@ import express from 'express';
 import cors from 'cors';
 import connectToDb from './database/db.js';
 import Tweet from './database/models/tweets.js';
-import { generateTweets, sendTweet, getAllTweets } from './database/controllers/controllers.js'
+import { generateTweets } from './database/controllers/openAI.js'
+import { sendTweet, getAllTweets } from './database/controllers/twitter.js'
 const app = express();
 
 await connectToDb();

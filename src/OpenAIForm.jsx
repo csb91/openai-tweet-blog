@@ -16,7 +16,7 @@ const model = [
   }
 ]
 
-export default function ChatGPTForm({ tweets }) {
+export default function OpenAIForm({ tweets, setTweets }) {
   const [test, setTest] = useState([]);
   const [temperature, setTemperature] = useState('');
   const [maxTokens, setMaxTokens] = useState('');
@@ -69,7 +69,7 @@ export default function ChatGPTForm({ tweets }) {
       })
       .then(res => {
         setLoader(0);
-        console.log(res.data);
+        setTweets(res.data);
       })
       .catch(err => {console.log(err)})
     } else {
