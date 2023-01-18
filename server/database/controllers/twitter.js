@@ -32,14 +32,21 @@ export const getAllTweets = (req, res) => {
   .catch(err => res.statusCode(500).send(err))
 }
 
-// T.post('statuses/update', tweet)
-// .then(res => {console.log(res)})
-// .catch(err => {console.log(err)})
+export const deleteTweet = (req, res) => {
+  let tweetIdTwitter = req.body.tweet.tweetId
 
+  T.post('statuses/destroy/:id', { id: tweetIdTwitter })
+  .then(res => {console.log(res)})
+  .catch(err => {console.log(err)})
+}
 
-// T.post('statuses/destroy/:id', { id: '1615555147232313344' })
-// .then(res => {console.log(res)})
-// .catch(err => {console.log(err)})
+export const removeTweetFromDb = (req, res) => {
+  let dbTweetId = req.body.tweet._id;
+
+  Tweet.deleteOne({_id: dbTweetId})
+  .catch(err => {console.log(err)})
+}
+
 
 // T.post('statuses/retweet/:id', { id: '343360866131001345' })
 // .then(res => {console.log(res)})

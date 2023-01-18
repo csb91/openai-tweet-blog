@@ -24,10 +24,20 @@ export default function TweetCard({ tweet }) {
 
   const deleteDB = (e) => {
     e.preventDefault();
+    axios.delete('http://localhost:3000/removeTweetFromDb', {
+      data: {'tweet': tweet}
+    })
+    .catch(err => console.log(err))
+    window.location.reload();
   }
 
   const deleteTwitter = (e) => {
     e.preventDefault();
+    axios.patch('http://localhost:3000/deleteTweet', {
+      'tweet': tweet
+    })
+    .catch(err => console.log(err))
+    window.location.reload();
   }
 
   return (
