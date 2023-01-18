@@ -24,6 +24,7 @@ export default function TweetCard({ tweet }) {
 
   const deleteDB = (e) => {
     e.preventDefault();
+
     axios.delete('http://localhost:3000/removeTweetFromDb', {
       data: {'tweet': tweet}
     })
@@ -33,6 +34,9 @@ export default function TweetCard({ tweet }) {
 
   const deleteTwitter = (e) => {
     e.preventDefault();
+    tweet.tweetId = 'false';
+    tweet.tweet_date = '';
+
     axios.patch('http://localhost:3000/deleteTweet', {
       'tweet': tweet
     })

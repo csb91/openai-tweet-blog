@@ -11,8 +11,6 @@ let T = new Twit({
 });
 
 export const sendTweet = (req, res) => {
-  //Need to get tweet info from req, create tweet, then update db
-  console.log(req.body)
   let dbTweetId = req.body.tweet._id;
   let tweet = {status: req.body.tweet.tweet};
 
@@ -33,10 +31,13 @@ export const getAllTweets = (req, res) => {
 }
 
 export const deleteTweet = (req, res) => {
-  let tweetIdTwitter = req.body.tweet.tweetId
+  let tweetIdTwitter = req.body.tweet.tweetId;
+  let dbTweetId = req.body.tweet._id;
+
+  Tweet.findOneAndUpdate({_id: dbTweetId}, {$set:{tweetId: 'false', tweet_date: ''}}, {new: true})
+  .catch(err => {console.log(err)})
 
   T.post('statuses/destroy/:id', { id: tweetIdTwitter })
-  .then(res => {console.log(res)})
   .catch(err => {console.log(err)})
 }
 

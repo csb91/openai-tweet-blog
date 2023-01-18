@@ -58,7 +58,7 @@ export default function OpenAIForm({ tweets, setTweets }) {
     let nTweets = Number(numberTweets);
     let prompt = e.target.elements.prompt.value;
 
-    if (temp && maxTokens && e.target.elements.model.value.length > 1 && e.target.elements.prompt.value.length >= 15) {
+    if (temp && maxTokens && e.target.elements.model.value.length > 1 && e.target.elements.prompt.value.length >= 5) {
       setLoader(1);
       axios.post('http://localhost:3000/generate', {
         'model': model,
@@ -139,7 +139,7 @@ export default function OpenAIForm({ tweets, setTweets }) {
           label="Input Prompt"
           multiline
           rows={5}
-          helperText="Enter prompt here, minimum of 15 characters"
+          helperText="Enter prompt here, minimum of 5 characters"
         />
       </div>
       <div>
