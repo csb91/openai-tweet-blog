@@ -140,7 +140,6 @@ export default function OpenAIForm({ tweets, setTweets }) {
           multiline
           rows={5}
           helperText="Enter prompt here, minimum of 15 characters"
-          variant="standard"
         />
       </div>
       <div>

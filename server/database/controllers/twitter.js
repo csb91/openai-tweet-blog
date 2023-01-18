@@ -16,14 +16,14 @@ export const sendTweet = (req, res) => {
   let dbTweetId = req.body.tweet._id;
   let tweet = {status: req.body.tweet.tweet};
 
-  T.post('statuses/update', tweet)
+  return T.post('statuses/update', tweet)
   .then(response => {
-    Tweet.findOneAndUpdate({_id: dbTweetId}, {$set:{tweetId: response.data.id_str, tweet_date: response.data.created_at}})
-    .then(result => {console.log(result)})
+    return Tweet.findOneAndUpdate({_id: dbTweetId}, {$set:{tweetId: response.data.id_str, tweet_date: response.data.created_at}}, {new: true})
+    .then(results => {return results})
     .catch(err => {console.log(err)})
   })
+  .then(test =>  res.send(test))
   .catch(err => {console.log(err)})
-  res.send('done')
 }
 
 export const getAllTweets = (req, res) => {
