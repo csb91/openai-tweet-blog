@@ -18,9 +18,7 @@ export const generateTweets = (req, res) => {
     `
     Generate ${req.body.numberTweets} tweets using this prompt: ${req.body.prompt},
     Responses should always be numbered followed by a period and a single space followed by the tweet.
-    If emojis are asked for vary their locations in the tweets.
-    Don't talk about emojis in the tweets.
-    All of the tweets should be related to coding and software engineering and development.
+    Responses should always be numbered followed by a period and a single space followed by the tweet.
     `
   let temperature = req.body.temperature;
   let max_tokens = req.body.max_tokens;
