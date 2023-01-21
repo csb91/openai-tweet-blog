@@ -14,6 +14,7 @@ export const generateTweets = (req, res) => {
   let model = req.body.model;
   //Need to tweak the prompt model
   //Could pass the current tweet list in the request and pass that into the promt as well to let model know those have already been tweeted
+  //limited to ~2096 characters
   let prompt =
     `
     Generate ${req.body.numberTweets} tweets using this prompt: ${req.body.prompt},
