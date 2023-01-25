@@ -52,17 +52,3 @@ export const removeTweetFromDb = (req, res) => {
 // T.post('statuses/retweet/:id', { id: '343360866131001345' })
 // .then(res => {console.log(res)})
 // .catch(err => {console.log(err)})
-
-// data: {
-//   created_at: 'Sat Jan 14 06:36:20 +0000 2023',
-//   id: 1614149396920139800,
-//   id_str: '1614149396920139776',
-//   text: 'Working long and hard to finish this coding project. Almost there! 🔥😎 #SoftwareEngineering #coding #development.',
-//   truncated: false,
-//   entities: { hashtags: [Array], symbols: [], user_mentions: [], urls: [] },
-//   source: '<a href="https://steria-llc.dev" rel="nofollow">Social Media Activity Job Search</a>',
-//   in_reply_to_status_id: null,
-//   in_reply_to_status_id_str: null,
-//   in_reply_to_user_id: null,
-//   in_reply_to_user_id_str: null,
-//   in_reply_to_screen_name: null,
