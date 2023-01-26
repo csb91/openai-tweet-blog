@@ -40,8 +40,8 @@ A future update will expand the app's capabilities to include the ability to gen
 
 ## Contributors
 
-<a href="https://github.com/openai-tweet-blog/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=openai-tweet-blog" />
+<a href="https://github.com/csb91/openai-tweet-blog/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=csb91/openai-tweet-blog" />
 </a>
 
 
