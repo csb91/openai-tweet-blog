@@ -13,7 +13,7 @@ import Tweet from '../../../../server/database/models/tweets.js';
 
 let sandbox = sinon.createSandbox()
 
-describe('twitter', () => {
+describe('Twitter controller', () => {
   let request;
   let deleteStub;
   let sampleArgs;
