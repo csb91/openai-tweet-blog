@@ -44,8 +44,15 @@ export const deleteTweet = (req, res) => {
 export const removeTweetFromDb = (req, res) => {
   let dbTweetId = req.body.tweet._id;
 
-  Tweet.deleteOne({_id: dbTweetId})
-  .catch(err => {console.log(err)})
+  if (!dbTweetId) {
+    return Promise.reject(new Error('Missing tweet id'))
+  }
+
+  return Tweet.deleteOne({_id: dbTweetId})
+  .catch(err => {
+    console.log(err)
+    res.status(500).json({error: 'An error occurred while deleting a tweet from the database'})
+  })
 }
 
 
