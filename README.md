@@ -12,6 +12,7 @@ A future update will expand the app's capabilities to include the ability to gen
   - [GPT-3 Input Parameters](#gpt-3-input-parameters)
   - [Generated Tweet List](#generated-tweet-list)
 - [Twitter](#twitter)
+- [Contributors](#contributors)
 
 
 ## Tech Stack
@@ -29,14 +30,18 @@ A future update will expand the app's capabilities to include the ability to gen
 ## Product Features
 
 ### GPT-3 Input Parameters
-<img src="assets/gpt3-input.png" width="100%"/>
+<img src="src/assets/gpt3-input.png" width="100%"/>
 
 ### Generated Tweet List
-<img src="assets/tweet-list.png" width="100%"/>
+<img src="src/assets/tweet-list.png" width="100%"/>
 
 ## Twitter
-<img src="assets/twitter.png" width="100%"/>
+<img src="src/assets/twitter.png" width="100%"/>
 
+## Contributors
 
+<a href="https://github.com/csb91/openai-tweet-blog/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=csb91/openai-tweet-blog" />
+</a>
 
 
