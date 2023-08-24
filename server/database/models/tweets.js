@@ -5,8 +5,14 @@ const tweetSchema = new mongoose.Schema({
     type: String,
     default: 'false'
   },
-  tweet: String,
-  created_date: Date,
+  tweet: {
+    type: String,
+    required: true
+  },
+  created_date: {
+    type: Date,
+    required: true
+  },
   tweet_date: {
     type: String,
     default: ''
