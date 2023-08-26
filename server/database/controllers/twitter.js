@@ -28,7 +28,7 @@ export const getAllTweets = (req, res) => {
   return Tweet.find()
   .then(results => res.send(results))
   .catch(err => {
-    res.status(500).json({error: 'An error occurred while retrieving all tweets from the database'})
+    res.status(500).json({error: 'An error occurred while retrieving all tweets from the database'});
   })
 }
 
@@ -36,25 +36,38 @@ export const deleteTweet = (req, res) => {
   let tweetIdTwitter = req.body.tweet.tweetId;
   let dbTweetId = req.body.tweet._id;
 
-  Tweet.findOneAndUpdate({_id: dbTweetId}, {$set:{tweetId: 'false', tweet_date: ''}}, {new: true})
-  .catch(err => {console.log(err)})
+  if (!tweetIdTwitter) {
+    return Promise.reject(new Error('Missing twitter tweet id'));
+  }
 
-  T.post('statuses/destroy/:id', { id: tweetIdTwitter })
-  .catch(err => {console.log(err)})
+  if (!dbTweetId) {
+    return Promise.reject(new Error('Missing tweet id'));
+  }
+
+  return T.post('statuses/destroy/:id', { id: tweetIdTwitter })
+  .then(() => {
+    return Tweet.findOneAndUpdate({_id: dbTweetId}, {$set:{tweetId: 'false', tweet_date: ''}}, {new: true})
+    .then(results => res.send(results))
+    .catch(err => {
+      res.status(500).json({error: 'An error occurred while updating the status of a tweet in the database'});
+    })
+  })
+  .catch(err => {
+    res.status(500).json({error: 'An error occurred while deleting a tweet from Twitter'});
+  })
 }
 
 export const removeTweetFromDb = (req, res) => {
   let dbTweetId = req.body.tweet._id;
 
   if (!dbTweetId) {
-    return Promise.reject(new Error('Missing tweet id'))
+    return Promise.reject(new Error('Missing tweet id'));
   }
 
   return Tweet.deleteOne({_id: dbTweetId})
   .then(results => res.send(results))
   .catch(err => {
-    console.log(err)
-    res.status(500).json({error: 'An error occurred while deleting a tweet from the database'})
+    res.status(500).json({error: 'An error occurred while deleting a tweet from the database'});
   })
 }
 

@@ -7,28 +7,53 @@ import sinonChai from 'sinon-chai';
 chai.use(sinonChai);
 
 import mongoose from 'mongoose';
+import Twit from 'twit';
 
 import { removeTweetFromDb, deleteTweet, getAllTweets, sendTweet} from '../../../../server/database/controllers/twitter.js';
 import Tweet from '../../../../server/database/models/tweets.js';
 
 describe('Twitter controller', () => {
-  let sandbox = sinon.createSandbox();
+  let sandbox
   let request;
+  let requestTwitterId;
+  let requestWithIds;
   let response;
   let findStub;
   let deleteStub;
-  let sampleArgs;
+  let findOneAndUpdateStub;
+  let sampleSentTweet;
   let sampleTweet;
-  const errorStub = new Error('Mock Error');
+  let deleteTweetArgs;
+  let errorStub = new Error('Mock Error');
 
   beforeEach(() => {
+    sandbox = sinon.createSandbox();
+
     request = {
       body: {
         tweet: {
-          _id: ''
+          _id: '',
         }
       }
-    }
+    };
+
+    requestTwitterId = {
+      body: {
+        tweet: {
+          _id: '',
+          tweetId: '123',
+        }
+      }
+    };
+
+    requestWithIds = {
+      body: {
+        tweet: {
+          tweetId: '123',
+          _id: '123',
+        }
+      }
+    };
 
     response = {
       send: sandbox.stub(),
@@ -44,8 +69,23 @@ describe('Twitter controller', () => {
       tweet_date: ''
     };
 
+    sampleSentTweet = {
+      _id: '63cb27597d5a02f88537ab84',
+      tweetId: '123',
+      tweet: 'this is a test tweet',
+      created_date: new Date,
+      tweet_date: new Date
+    };
+
+    // deleteTweetArgs = {
+    //   {_id: '123'},
+    //   {$set: {tweetId: 'false', tweet_date: ''}},
+    //   {new: true},
+    // };
+
     findStub = sandbox.stub(mongoose.Model, 'find').resolves(sampleTweet);
     deleteStub = sandbox.stub(mongoose.Model, 'deleteOne').resolves('fake_remove_result');
+    findOneAndUpdateStub = sandbox.stub(mongoose.Model, 'findOneAndUpdate').resolves(sampleTweet);
   })
 
   afterEach(() => {
@@ -60,7 +100,9 @@ describe('Twitter controller', () => {
       await getAllTweets(request, response);
 
       expect(response.status).to.have.been.calledWith(500);
-      expect(response.json).to.have.been.calledOnceWith({ error: 'An error occurred while retrieving all tweets from the database' })
+      expect(response.json).to.have.been.calledOnceWith(
+        { error: 'An error occurred while retrieving all tweets from the database' }
+        )
     })
 
     it('should call getAllTweets', async () => {
@@ -71,6 +113,44 @@ describe('Twitter controller', () => {
       expect(response.send).to.have.been.calledOnceWith(sampleTweet);
       expect(findStub).to.have.been.calledWith();
     });
+  })
+
+
+  context('deleteTweet', () => {
+    it('should handle an error for findOneAndUpdate with status 500', async () => {
+      findOneAndUpdateStub.rejects(errorStub)
+      sandbox.stub(Twit.prototype, 'post').resolves()
+
+      await deleteTweet(requestWithIds, response)
+
+      expect(response.status).to.have.been.calledWith(500);
+      expect(findOneAndUpdateStub).to.have.been.calledOnce;
+      expect(findOneAndUpdateStub).to.have.been.calledWith({_id: '123'})
+    })
+
+    it('should check for an error to be thrown eventually when twitter tweet id is missing', () => {
+
+      return expect(deleteTweet(request, response)).to.be.eventually.rejectedWith('Missing twitter tweet id')
+    })
+
+    it('should check for an error to be thrown eventually when the tweet id is missing', () => {
+
+      return expect(deleteTweet(requestTwitterId, response)).to.be.eventually.rejectedWith('Missing tweet id');
+    })
+
+    it('should successfully call findOneAndUpdate', async () => {
+      sandbox.stub(Twit.prototype, 'post').resolves()
+      request.body.tweet = sampleSentTweet
+
+      await deleteTweet(request, response)
+
+      expect(response.send).to.have.been.calledWith(sampleTweet);
+      expect(findOneAndUpdateStub).to.have.been.calledWith(
+        {_id: '63cb27597d5a02f88537ab84'},
+        {$set:{tweetId: 'false', tweet_date: ''}},
+        {new: true}
+        )
+    })
   })
 
   context('removeTweetFromDb', () => {
