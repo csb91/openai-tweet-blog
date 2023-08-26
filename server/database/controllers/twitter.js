@@ -14,6 +14,14 @@ export const sendTweet = (req, res) => {
   let dbTweetId = req.body.tweet._id;
   let tweet = {status: req.body.tweet.tweet};
 
+  if (!dbTweetId) {
+    return Promise.reject(new Error('Missing tweet id'));
+  }
+
+  if(!tweet[status]) {
+    return Promise.reject(new Error('Missing tweet text'));
+  }
+
   return T.post('statuses/update', tweet)
   .then(response => {
     return Tweet.findOneAndUpdate({_id: dbTweetId}, {$set:{tweetId: response.data.id_str, tweet_date: response.data.created_at}}, {new: true})
