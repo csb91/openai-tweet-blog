@@ -25,9 +25,11 @@ export const sendTweet = (req, res) => {
 }
 
 export const getAllTweets = (req, res) => {
-  Tweet.find()
+  return Tweet.find()
   .then(results => res.send(results))
-  .catch(err => res.statusCode(500).send(err))
+  .catch(err => {
+    res.status(500).json({error: 'An error occurred while retrieving all tweets from the database'})
+  })
 }
 
 export const deleteTweet = (req, res) => {
@@ -49,6 +51,7 @@ export const removeTweetFromDb = (req, res) => {
   }
 
   return Tweet.deleteOne({_id: dbTweetId})
+  .then(results => res.send(results))
   .catch(err => {
     console.log(err)
     res.status(500).json({error: 'An error occurred while deleting a tweet from the database'})
