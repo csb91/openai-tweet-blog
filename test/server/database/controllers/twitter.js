@@ -63,7 +63,7 @@ describe('Twitter controller', () => {
 
     sampleTweet = {
       _id: '63cb27597d5a02f88537ab84',
-      tweetID: 'false',
+      tweetId: 'false',
       tweet: 'this is a test tweet',
       created_date: new Date,
       tweet_date: ''
@@ -115,10 +115,9 @@ describe('Twitter controller', () => {
 
     it('should check for an error to eventually be thrown when the tweet text is missing', () => {
       request.body._id = '123';
+      console.log(request)
 
       expect(findOneAndUpdateStub(request, response)).to.be.eventually.rejectedWith('Missing tweet text');
-
-      sinon.restore();
     })
 
     it('should successfully call findOneAndUpdate', async () => {
