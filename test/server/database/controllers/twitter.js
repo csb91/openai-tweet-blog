@@ -15,7 +15,6 @@ import Tweet from '../../../../server/database/models/tweets.js';
 describe('Twitter controller', () => {
   let sandbox
   let request;
-  let requestTwitterId;
   let requestWithIds;
   let response;
   let findStub;
@@ -33,15 +32,6 @@ describe('Twitter controller', () => {
       body: {
         tweet: {
           _id: '',
-        }
-      }
-    };
-
-    requestTwitterId = {
-      body: {
-        tweet: {
-          _id: '',
-          tweetId: '123',
         }
       }
     };
@@ -172,8 +162,9 @@ describe('Twitter controller', () => {
     })
 
     it('should check for an error to be thrown eventually when the tweet id is missing', () => {
+      request.body.tweet.tweetId = '123'
 
-      return expect(deleteTweet(requestTwitterId, response)).to.be.eventually.rejectedWith('Missing tweet id');
+      return expect(deleteTweet(request, response)).to.be.eventually.rejectedWith('Missing tweet id');
     })
 
     it('should successfully call findOneAndUpdate', async () => {
