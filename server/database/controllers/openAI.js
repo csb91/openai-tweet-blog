@@ -29,7 +29,7 @@ export const generateTweets = (req, res) => {
   }
 
   if (!req.body.numberTweets) {
-    return Promise.reject('Missing number of tweet')
+    return Promise.reject('Missing number of tweets')
   }
 
   if (!temperature) {
