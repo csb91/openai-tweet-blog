@@ -21,23 +21,23 @@ export const generateTweets = (req, res) => {
   let max_tokens = req.body.max_tokens;
 
   if (!model) {
-    return Promise.reject('Missing model type');
+    return Promise.reject(new Error('Missing model type'));
   }
 
   if (!req.body.prompt) {
-    return Promise.reject('Missing prompt');
+    return Promise.reject(new Error('Missing prompt'));
   }
 
   if (!req.body.numberTweets) {
-    return Promise.reject('Missing number of tweets')
+    return Promise.reject(new Error('Missing number of tweets'));
   }
 
   if (!temperature) {
-    return Promise.reject('Missing temperature');
+    return Promise.reject(new Error('Missing temperature'));
   }
 
   if (!max_tokens) {
-    return Promise.reject('Missing max tokens');
+    return Promise.reject(new Error('Missing max tokens'));
   }
 
   const response = openai.createCompletion({
