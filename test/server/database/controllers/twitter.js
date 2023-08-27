@@ -65,7 +65,7 @@ describe('Twitter controller', () => {
       _id: '63cb27597d5a02f88537ab84',
       tweetId: 'false',
       tweet: 'this is a test tweet',
-      created_date: new Date,
+      created_date: new Date(2023, 7, 26, 12, 0, 0, 0),
       tweet_date: ''
     };
 
@@ -73,8 +73,8 @@ describe('Twitter controller', () => {
       _id: '63cb27597d5a02f88537ab84',
       tweetId: '123',
       tweet: 'this is a test tweet',
-      created_date: new Date,
-      tweet_date: new Date
+      created_date: new Date(2023, 7, 26, 12, 0, 0, 0),
+      tweet_date: new Date(2023, 7, 26, 12, 0, 0, 0)
     };
 
     findStub = sandbox.stub(mongoose.Model, 'find').resolves(sampleTweet);
@@ -89,11 +89,10 @@ describe('Twitter controller', () => {
 
   context('sendTweet', () => {
     it('should handle an error for findOneAndUpdate with status 500', async () => {
-      request.body.tweet._id = '123';
-      request.body.tweet.tweet = 'This is a test';
+      request.body.tweet = sampleTweet
 
       findOneAndUpdateStub.rejects(errorStub)
-      sandbox.stub(Twit.prototype, 'post').resolves({data: { id_str: '123', created_at: '123'}});
+      sandbox.stub(Twit.prototype, 'post').resolves({data: { id_str: '123', created_at: new Date(2023, 7, 26, 12, 0, 0, 0)}});
 
       await sendTweet(request, response);
 
