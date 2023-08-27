@@ -13,7 +13,7 @@ import { removeTweetFromDb, deleteTweet, getAllTweets, sendTweet} from '../../..
 import Tweet from '../../../../server/database/models/tweets.js';
 
 describe('Twitter controller', () => {
-  let sandbox
+  let sandbox;
   let request;
   let response;
   let findStub;
@@ -69,9 +69,9 @@ describe('Twitter controller', () => {
 
   context('sendTweet', () => {
     it('should handle an error for findOneAndUpdate with status 500', async () => {
-      request.body.tweet = sampleTweet
+      request.body.tweet = sampleTweet;
 
-      findOneAndUpdateStub.rejects(errorStub)
+      findOneAndUpdateStub.rejects(errorStub);
       sandbox.stub(Twit.prototype, 'post').resolves({data: { id_str: '123', created_at: new Date(2023, 7, 26, 12, 0, 0, 0)}});
 
       await sendTweet(request, response);
@@ -79,7 +79,7 @@ describe('Twitter controller', () => {
       expect(response.status).to.have.been.calledWith(500);
       expect(response.json).to.have.been.calledWith({
         error: 'An error occurred while updating the status of a tweet in the database'
-      })
+      });
 
       sinon.restore();
     })
@@ -98,7 +98,7 @@ describe('Twitter controller', () => {
 
     it('should successfully call findOneAndUpdate', async () => {
       request.body.tweet = sampleTweet;
-      sandbox.stub(Twit.prototype, 'post').resolves({data: { id_str: '123', created_at: new Date(2023, 7, 26, 12, 0, 0, 0)}})
+      sandbox.stub(Twit.prototype, 'post').resolves({data: { id_str: '123', created_at: new Date(2023, 7, 26, 12, 0, 0, 0)}});
 
       await sendTweet(request, response);
 
@@ -107,7 +107,7 @@ describe('Twitter controller', () => {
         {_id: '63cb27597d5a02f88537ab84'},
         {$set:{tweetId: '123', tweet_date: new Date(2023, 7, 26, 12, 0, 0, 0)}},
         {new: true}
-      )
+      );
     })
   })
 
@@ -120,7 +120,7 @@ describe('Twitter controller', () => {
       expect(response.status).to.have.been.calledWith(500);
       expect(response.json).to.have.been.calledOnceWith(
         { error: 'An error occurred while retrieving all tweets from the database' }
-        )
+        );
     })
 
     it('should call getAllTweets', async () => {
@@ -139,39 +139,39 @@ describe('Twitter controller', () => {
       request.body.tweet._id = '123';
       request.body.tweet.tweetId = '123';
 
-      findOneAndUpdateStub.rejects(errorStub)
-      sandbox.stub(Twit.prototype, 'post').resolves()
+      findOneAndUpdateStub.rejects(errorStub);
+      sandbox.stub(Twit.prototype, 'post').resolves();
 
-      await deleteTweet(request, response)
+      await deleteTweet(request, response);
 
       expect(response.status).to.have.been.calledWith(500);
       expect(findOneAndUpdateStub).to.have.been.calledOnce;
-      expect(findOneAndUpdateStub).to.have.been.calledWith({_id: '123'})
+      expect(findOneAndUpdateStub).to.have.been.calledWith({_id: '123'});
     })
 
     it('should check for an error to be thrown eventually when twitter tweet id is missing', () => {
 
-      return expect(deleteTweet(request, response)).to.be.eventually.rejectedWith('Missing twitter tweet id')
+      return expect(deleteTweet(request, response)).to.be.eventually.rejectedWith('Missing twitter tweet id');
     })
 
     it('should check for an error to be thrown eventually when the tweet id is missing', () => {
-      request.body.tweet.tweetId = '123'
+      request.body.tweet.tweetId = '123';
 
       return expect(deleteTweet(request, response)).to.be.eventually.rejectedWith('Missing tweet id');
     })
 
     it('should successfully call findOneAndUpdate', async () => {
-      request.body.tweet = sampleSentTweet
-      sandbox.stub(Twit.prototype, 'post').resolves()
+      request.body.tweet = sampleSentTweet;
+      sandbox.stub(Twit.prototype, 'post').resolves();
 
-      await deleteTweet(request, response)
+      await deleteTweet(request, response);
 
       expect(response.send).to.have.been.calledWith(sampleTweet);
       expect(findOneAndUpdateStub).to.have.been.calledWith(
         {_id: '63cb27597d5a02f88537ab84'},
         {$set:{tweetId: 'false', tweet_date: ''}},
         {new: true}
-        )
+        );
     })
   })
 
@@ -184,7 +184,7 @@ describe('Twitter controller', () => {
       .catch((err) => {
         expect(err).to.be.instanceof(Error);
         expect(err.message).to.equal('Missing tweet id');
-      })
+      });
     })
 
     it('should check for an error to be thrown eventually', () => {
