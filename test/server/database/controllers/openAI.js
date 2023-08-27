@@ -16,6 +16,7 @@ describe('openAI Controller', () => {
   let sandbox;
   let request;
   let response;
+  let sampleTweet;
   let findStub;
   let createStub;
 
@@ -24,11 +25,11 @@ describe('openAI Controller', () => {
 
     request = {
       body: {
-        model: '',
-        prompt: '',
-        numberTweets: '',
-        temperature: '',
-        max_tokens: ''
+        model: 'text-davinci-003',
+        prompt: 'create tweets about react',
+        numberTweets: 3,
+        temperature: 1,
+        max_tokens: 500
       }
     };
 
@@ -36,6 +37,14 @@ describe('openAI Controller', () => {
       send: sandbox.stub(),
       status: sandbox.stub().returnsThis(),
       json: sandbox.stub()
+    };
+
+    sampleTweet = {
+      _id: '63cb27597d5a02f88537ab84',
+      tweetId: 'false',
+      tweet: 'this is a test tweet',
+      created_date: new Date(2023, 7, 26, 12, 0, 0, 0),
+      tweet_date: ''
     };
   });
 
@@ -45,47 +54,31 @@ describe('openAI Controller', () => {
   });
 
   it('should check for an error to eventually be thrown when the model type is missing', () => {
-    request.body.prompt = 'create tweets about react';
-    request.body.numberTweets = 3;
-    request.body.temperature = 1;
-    request.body.max_tokens = 500;
-
+    request.body.model = '';
 
     return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing model type');
   });
 
   it('should check for an error to eventually be thrown when the prompt is missing', () => {
-    request.body.numberTweets = 3;
-    request.body.temperature = 1;
-    request.body.max_tokens = 500;
-    request.body.model = 'text-davinci-003';
+    request.body.prompt = '';
 
     return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing prompt');
   });
 
   it('should check for an error to eventually be thrown when the number of tweets is missing', () => {
-    request.body.prompt = 'create tweets about react';
-    request.body.temperature = 1;
-    request.body.max_tokens = 500;
-    request.body.model = 'text-davinci-003';
+    request.body.numberTweets = '';
 
     return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing number of tweets');
   });
 
   it ('should check for an error to eventually be thrown when the temperature is missing', () => {
-    request.body.prompt = 'create tweets about react';
-    request.body.numberTweets = 3;
-    request.body.max_tokens = 500;
-    request.body.model = 'text-davinci-003';
+    request.body.temperature = '';
 
     return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing temperature');
   });
 
   it('should check for an error to eventually be thrown when the max tokens is missing', () => {
-    request.body.prompt = 'create tweets about react';
-    request.body.numberTweets = 3;
-    request.body.temperature = 1;
-    request.body.model = 'text-davinci-003';
+    request.body.max_tokens = '';
 
     return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing max tokens');
   });
