@@ -77,12 +77,6 @@ describe('Twitter controller', () => {
       tweet_date: new Date
     };
 
-    // deleteTweetArgs = {
-    //   {_id: '123'},
-    //   {$set: {tweetId: 'false', tweet_date: ''}},
-    //   {new: true},
-    // };
-
     findStub = sandbox.stub(mongoose.Model, 'find').resolves(sampleTweet);
     deleteStub = sandbox.stub(mongoose.Model, 'deleteOne').resolves('fake_remove_result');
     findOneAndUpdateStub = sandbox.stub(mongoose.Model, 'findOneAndUpdate').resolves(sampleTweet);
@@ -91,6 +85,55 @@ describe('Twitter controller', () => {
   afterEach(() => {
     sinon.restore();
     sandbox.restore();
+  })
+
+  context('sendTweet', () => {
+    it('should handle an error for findOneAndUpdate with status 500', async () => {
+      request.body.tweet._id = '123';
+      request.body.tweet.tweet = 'This is a test';
+
+      findOneAndUpdateStub.rejects(errorStub)
+      sandbox.stub(Twit.prototype, 'post').resolves({data: { id_str: '123', created_at: '123'}});
+
+      await sendTweet(request, response);
+
+      expect(response.status).to.have.been.calledWith(500);
+      expect(response.json).to.have.been.calledWith({
+        error: 'An error occurred while updating the status of a tweet in the database'
+      })
+
+      sinon.restore();
+    })
+
+    it('should check for an error to eventually be thrown when the tweet id is missing', () => {
+      request.body.tweet.tweet = 'test tweet';
+
+      expect(findOneAndUpdateStub(request, response)).to.be.eventually.rejectedWith('Missing tweet Id');
+
+      sinon.restore();
+    })
+
+    it('should check for an error to eventually be thrown when the tweet text is missing', () => {
+      request.body._id = '123';
+
+      expect(findOneAndUpdateStub(request, response)).to.be.eventually.rejectedWith('Missing tweet text');
+
+      sinon.restore();
+    })
+
+    it('should successfully call findOneAndUpdate', async () => {
+      request.body.tweet = sampleTweet;
+      sandbox.stub(Twit.prototype, 'post').resolves({data: { id_str: '123', created_at: new Date(2023, 7, 26, 12, 0, 0, 0)}})
+
+      await sendTweet(request, response);
+
+      expect(response.send).to.have.been.calledOnceWith(sampleTweet);
+      expect(findOneAndUpdateStub).to.have.been.calledOnceWith(
+        {_id: '63cb27597d5a02f88537ab84'},
+        {$set:{tweetId: '123', tweet_date: new Date(2023, 7, 26, 12, 0, 0, 0)}},
+        {new: true}
+      )
+    })
   })
 
   context('getAllTweets', () => {
