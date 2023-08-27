@@ -26,7 +26,9 @@ export const sendTweet = (req, res) => {
   .then(response => {
     return Tweet.findOneAndUpdate({_id: dbTweetId}, {$set:{tweetId: response.data.id_str, tweet_date: response.data.created_at}}, {new: true})
     .then(results => {return results})
-    .catch(err => {console.log(err)})
+    .catch(err => {
+      res.status(500).json({error: 'An error occurred while updating the status of a tweet in the database'})
+    })
   })
   .then(test =>  res.send(test))
   .catch(err => {console.log(err)})
