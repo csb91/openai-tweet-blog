@@ -10,7 +10,6 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export const generateTweets = (req, res) => {
-  console.log(req.body)
   let model = req.body.model;
   let prompt =
     `
@@ -20,6 +19,26 @@ export const generateTweets = (req, res) => {
     `
   let temperature = req.body.temperature;
   let max_tokens = req.body.max_tokens;
+
+  if (!model) {
+    return Promise.reject('Missing model type');
+  }
+
+  if (!req.body.prompt) {
+    return Promise.reject('Missing prompt');
+  }
+
+  if (!req.body.numberTweets) {
+    return Promise.reject('Missing number of tweet')
+  }
+
+  if (!temperature) {
+    return Promise.reject('Missing temperature');
+  }
+
+  if (!max_tokens) {
+    return Promise.reject('Missing max tokens');
+  }
 
   const response = openai.createCompletion({
     model,
