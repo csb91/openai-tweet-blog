@@ -31,7 +31,9 @@ export const sendTweet = (req, res) => {
     })
   })
   .then(test =>  res.send(test))
-  .catch(err => {console.log(err)})
+  .catch(err => {
+    res.status(500).json({error: 'An error occurred while posting a tweet on Twitter'})
+  })
 }
 
 export const getAllTweets = (req, res) => {
