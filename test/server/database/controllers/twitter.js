@@ -180,8 +180,8 @@ describe('Twitter controller', () => {
     })
 
     it('should successfully call findOneAndUpdate', async () => {
-      sandbox.stub(Twit.prototype, 'post').resolves()
       request.body.tweet = sampleSentTweet
+      sandbox.stub(Twit.prototype, 'post').resolves()
 
       await deleteTweet(request, response)
 
