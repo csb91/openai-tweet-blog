@@ -15,7 +15,6 @@ import Tweet from '../../../../server/database/models/tweets.js';
 describe('Twitter controller', () => {
   let sandbox
   let request;
-  let requestWithIds;
   let response;
   let findStub;
   let deleteStub;
@@ -32,15 +31,6 @@ describe('Twitter controller', () => {
       body: {
         tweet: {
           _id: '',
-        }
-      }
-    };
-
-    requestWithIds = {
-      body: {
-        tweet: {
-          tweetId: '123',
-          _id: '123',
         }
       }
     };
@@ -146,10 +136,13 @@ describe('Twitter controller', () => {
 
   context('deleteTweet', () => {
     it('should handle an error for findOneAndUpdate with status 500', async () => {
+      request.body.tweet._id = '123';
+      request.body.tweet.tweetId = '123';
+
       findOneAndUpdateStub.rejects(errorStub)
       sandbox.stub(Twit.prototype, 'post').resolves()
 
-      await deleteTweet(requestWithIds, response)
+      await deleteTweet(request, response)
 
       expect(response.status).to.have.been.calledWith(500);
       expect(findOneAndUpdateStub).to.have.been.calledOnce;
