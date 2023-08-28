@@ -9,67 +9,68 @@ const configuration = new Configuration({
 });
 const openai = new OpenAIApi(configuration);
 
-export const generateTweets = (req, res) => {
-  let model = req.body.model;
+export const validateInput = (req) => {
+  return new Promise((resolve, reject) => {
+    if (!req.body.model || !req.body.prompt || !req.body.numberTweets || !req.body.temperature || !req.body.max_tokens) {
+      reject(new Error('Missing required input parameter'));
+    } else {
+      resolve();
+    }
+  });
+}
+
+export const generateTweetsWithAPI =  (req) => {
+  const { model, temperature, max_tokens } = req.body;
   let prompt =
-    `
-    Generate ${req.body.numberTweets} tweets using this prompt: ${req.body.prompt},
-    Responses should always be numbered followed by a period and a single space followed by the tweet.
-    Responses should always be numbered followed by a period and a single space followed by the tweet.
-    `
-  let temperature = req.body.temperature;
-  let max_tokens = req.body.max_tokens;
+  `
+  Generate ${req.body.numberTweets} tweets using this prompt: ${req.body.prompt},
+  Responses should always be numbered followed by a period and a single space followed by the tweet.
+  Responses should always be numbered followed by a period and a single space followed by the tweet.
+  `
 
-  if (!model) {
-    return Promise.reject(new Error('Missing model type'));
-  }
-
-  if (!req.body.prompt) {
-    return Promise.reject(new Error('Missing prompt'));
-  }
-
-  if (!req.body.numberTweets) {
-    return Promise.reject(new Error('Missing number of tweets'));
-  }
-
-  if (!temperature) {
-    return Promise.reject(new Error('Missing temperature'));
-  }
-
-  if (!max_tokens) {
-    return Promise.reject(new Error('Missing max tokens'));
-  }
-
-  const response = openai.createCompletion({
+  return openai.createCompletion({
     model,
     prompt,
     temperature,
     max_tokens
   })
   .then(results => results.data.choices[0].text.slice(1).split('\n'))
-  .then(tweetArray => {
-    let promises = tweetArray.map(item => {
-      return new Promise((resolve, reject) => {
-        Tweet.find({tweet: encodeEmojis(item.slice(3))})
-        .then((result) => {
-          if (!result.length) {
-            Tweet.create({
-              tweet: item.slice(3),
-              created_date: new Date()
-            })
-            .then(resolve)
-            .catch(reject)
-          }
-          else {
-            resolve();
-          }
-        })
-        .catch(reject)
+  .catch(err => {
+    throw new Error('An error occurred while generating tweets with openAI API');
+  });
+}
+
+export const saveTweetsToDb = (tweetArray) => {
+  let promises = tweetArray.map(item => {
+    return new Promise((resolve, reject) => {
+      Tweet.find({tweet: encodeEmojis(item.slice(3))})
+      .then((result) => {
+        if (!result.length) {
+          Tweet.create({
+            tweet: item.slice(3),
+            created_date: new Date()
+          })
+          .then(resolve)
+          .catch(reject)
+        }
+        else {
+          resolve();
+        }
       })
-    });
-    return Promise.all(promises)
-  })
-  .then(() => {return Tweet.find()})
-  .then(dbTweets => res.send(dbTweets))
-  .catch(err => res.send(err))
+      .catch(reject)
+    })
+  });
+
+  return Promise.all(promises);
+}
+
+export const generateTweets = (req, res) => {
+  return validateInput(req)
+  .then(() => generateTweetsWithAPI(req))
+  .then(tweetArray => saveTweetsToDb(tweetArray))
+  .then(() => Tweet.find())
+  .then((dbTweets) => res.send(dbTweets))
+  .catch(err => {
+    res.status(500).json({error: 'Error occurred while generating tweets'})
+  });
 }
