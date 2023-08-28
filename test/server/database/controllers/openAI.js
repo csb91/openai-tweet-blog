@@ -9,7 +9,7 @@ chai.use(sinonChai);
 import mongoose from 'mongoose';
 
 import { Configuration, OpenAIApi } from 'openai';
-import { generateTweets } from '../../../../server/database/controllers/openAI.js';
+import { validateInput, generateTweetsWithAPI, saveTweetsToDb, generateTweets } from '../../../../server/database/controllers/openAI.js';
 import Tweet from '../../../../server/database/models/tweets.js';
 
 describe('openAI Controller', () => {
@@ -53,34 +53,40 @@ describe('openAI Controller', () => {
     sandbox.restore();
   });
 
-  it('should check for an error to eventually be thrown when the model type is missing', () => {
-    request.body.model = '';
+  context('validateInput', () => {
+    it('should check for an error to eventually be thrown when the model type is missing', () => {
+      request.body.model = '';
 
-    return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing model type');
+      return expect(validateInput(request)).to.be.eventually.rejectedWith('Missing required input parameter');
+    });
+
+    it('should check for an error to eventually be thrown when the prompt is missing', () => {
+      request.body.prompt = '';
+
+      return expect(validateInput(request)).to.be.eventually.rejectedWith('Missing required input parameter');
+    });
+
+    it('should check for an error to eventually be throw when the number of tweets are missing', () => {
+      request.body.numberTweets = '';
+
+      return expect(validateInput(request)).to.be.eventually.rejectedWith('Missing required input parameter');
+    })
+
+    it('should check for an error to eventually be throw when the temperature is missing', () => {
+      request.body.temperature = '';
+
+      return expect(validateInput(request)).to.be.eventually.rejectedWith('Missing required input parameter');
+    })
+
+    it('should check for an error to eventually be throw when the max tokens are missing', () => {
+      request.body.max_tokens = '';
+
+      return expect(validateInput(request)).to.be.eventually.rejectedWith('Missing required input parameter');
+    })
+
+    it('should resolve eventually when all the required input parameters are present', () => {
+
+      return expect(validateInput(request)).to.be.fulfilled;
+    })
   });
-
-  it('should check for an error to eventually be thrown when the prompt is missing', () => {
-    request.body.prompt = '';
-
-    return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing prompt');
-  });
-
-  it('should check for an error to eventually be thrown when the number of tweets is missing', () => {
-    request.body.numberTweets = '';
-
-    return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing number of tweets');
-  });
-
-  it ('should check for an error to eventually be thrown when the temperature is missing', () => {
-    request.body.temperature = '';
-
-    return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing temperature');
-  });
-
-  it('should check for an error to eventually be thrown when the max tokens is missing', () => {
-    request.body.max_tokens = '';
-
-    return expect(generateTweets(request, response)).to.be.eventually.rejectedWith('Missing max tokens');
-  });
-
 });
