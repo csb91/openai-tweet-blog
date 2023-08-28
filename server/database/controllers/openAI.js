@@ -11,6 +11,7 @@ const openai = new OpenAIApi(configuration);
 
 export const validateInput = (req) => {
   return new Promise((resolve, reject) => {
+    console.log(req.body)
     if (!req.body.model || !req.body.prompt || !req.body.numberTweets || !req.body.temperature || !req.body.max_tokens) {
       reject(new Error('Missing required input parameter'));
     } else {
@@ -36,7 +37,7 @@ export const generateTweetsWithAPI =  (req) => {
   })
   .then(results => results.data.choices[0].text.slice(1).split('\n'))
   .catch(err => {
-    throw new Error('An error occurred while generating tweets with openAI API');
+    return Promise.reject(new Error('An error occurred while generating tweets with openAI API'));
   });
 }
 
