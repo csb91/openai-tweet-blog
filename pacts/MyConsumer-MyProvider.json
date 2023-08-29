@@ -1,0 +1,55 @@
+{
+  "consumer": {
+    "name": "MyConsumer"
+  },
+  "interactions": [
+    {
+      "description": "a request for all tweets",
+      "providerState": "i have a list of tweets",
+      "request": {
+        "headers": {
+          "Accept": "application/problem+json, application/json, text/plain, */*"
+        },
+        "method": "GET",
+        "path": "/all"
+      },
+      "response": {
+        "body": [
+          {
+            "_id": "63cb27597d5a02f88537ab84",
+            "created_date": "Mon Aug 28 2023 19:56:48 GMT-0500 (Central Daylight Time)",
+            "tweet": "this is a test tweet",
+            "tweetId": "false",
+            "tweet_date": ""
+          },
+          {
+            "_id": "63cb27597d5a02f88537ab85",
+            "created_date": "Mon Aug 28 2023 19:56:48 GMT-0500 (Central Daylight Time)",
+            "tweet": "this is a second test tweet",
+            "tweetId": "false",
+            "tweet_date": ""
+          }
+        ],
+        "headers": {
+          "Content-Type": "application/json, application/json"
+        },
+        "status": 200
+      }
+    }
+  ],
+  "metadata": {
+    "pact-js": {
+      "version": "12.1.0"
+    },
+    "pactRust": {
+      "ffi": "0.4.7",
+      "models": "1.1.9"
+    },
+    "pactSpecification": {
+      "version": "2.0.0"
+    }
+  },
+  "provider": {
+    "name": "MyProvider"
+  }
+}
