@@ -11,7 +11,6 @@ const openai = new OpenAIApi(configuration);
 
 export const validateInput = (req) => {
   return new Promise((resolve, reject) => {
-    console.log(req.body)
     if (!req.body.model || !req.body.prompt || !req.body.numberTweets || !req.body.temperature || !req.body.max_tokens) {
       reject(new Error('Missing required input parameter'));
     } else {
@@ -41,26 +40,36 @@ export const generateTweetsWithAPI =  (req) => {
   });
 }
 
-export const saveTweetsToDb = (tweetArray) => {
-  let promises = tweetArray.map(item => {
-    return new Promise((resolve, reject) => {
-      Tweet.find({tweet: encodeEmojis(item.slice(3))})
-      .then((result) => {
-        if (!result.length) {
-          Tweet.create({
-            tweet: item.slice(3),
-            created_date: new Date()
-          })
-          .then(resolve)
-          .catch(reject)
-        }
-        else {
-          resolve();
-        }
-      })
-      .catch(reject)
+export const findTweetInDb = (tweet) => {
+  return Tweet.find({
+    tweet: encodeEmojis(tweet)
+  })
+  .catch(err => {
+    throw new Error('An error occurred while finding a tweet in the database');
+  })
+}
+
+export const createNewTweet = (tweet) => {
+  return Tweet.create({
+    tweet: item.slice(3),
+    created_date: new Date()
+  })
+  .catch(err => {
+    return Promise.reject(new Error('An error occurred while generating tweets with openAI API'));
+  })
+}
+
+export const saveSingleTweetToDb = (tweet) => {
+  return findTweetInDb(tweet)
+    .then((result) => {
+      if (!result.length) {
+        return createNewTweet(tweet)
+      }
     })
-  });
+}
+
+export const saveTweetsToDb = (tweetArray) => {
+  let promises = tweetArray.map((item) => saveSingleTweetToDb(item.slice(3)));
 
   return Promise.all(promises);
 }
