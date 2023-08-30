@@ -19,6 +19,8 @@ app.post('/createTweet', sendTweet);
 app.patch('/deleteTweet', deleteTweet);
 app.delete('/removeTweetFromDb', removeTweetFromDb);
 
-app.listen(process.env.PORT, () => {
+const server = app.listen(process.env.PORT, () => {
   console.log(`App listening on port ${process.env.PORT}`)
 })
+
+export default server;
