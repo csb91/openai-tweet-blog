@@ -15,11 +15,13 @@ export const sendTweet = (req, res) => {
   let tweet = {status: req.body.tweet.tweet};
 
   if (!dbTweetId) {
-    return Promise.reject(new Error('Missing tweet id'));
+    res.status(400).json({error: 'Missing tweet id'})
+    return;
   }
 
   if(!tweet.status) {
-    return Promise.reject(new Error('Missing tweet text'));
+    res.status(400).json({error: 'Missing tweet text'})
+    return;
   }
 
   return T.post('statuses/update', tweet)
