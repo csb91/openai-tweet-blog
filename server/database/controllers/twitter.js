@@ -50,11 +50,13 @@ export const deleteTweet = (req, res) => {
   let dbTweetId = req.body.tweet._id;
 
   if (!tweetIdTwitter) {
-    return Promise.reject(new Error('Missing twitter tweet id'));
+    res.status(400).json({error: 'Missing twitter tweet id'})
+    return;
   }
 
   if (!dbTweetId) {
-    return Promise.reject(new Error('Missing tweet id'));
+    res.status(400).json({error: 'Missing tweet id'});
+    return;
   }
 
   return T.post('statuses/destroy/:id', { id: tweetIdTwitter })
