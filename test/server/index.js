@@ -22,11 +22,11 @@ describe('API tests', () => {
 
   before(() => {
 
-  })
+  });
 
   after(() => {
     //server.close();
-  })
+  });
 
   beforeEach(() => {
     sandbox = sinon.createSandbox();
@@ -39,7 +39,7 @@ describe('API tests', () => {
         created_date: new Date(2023, 7, 26, 12, 0, 0, 0),
         tweet_date: ''
       }
-    }
+    };
 
     multipleTweets = [sampleTweet, sampleTweet];
 
@@ -49,14 +49,14 @@ describe('API tests', () => {
       numberTweets: 3,
       temperature: 1,
       max_tokens: 500
-    }
+    };
 
-  })
+  });
 
   afterEach(() => {
     sinon.restore();
     sandbox.restore();
-  })
+  });
 
   context('/all', () => {
     it('should handle a database error', (done) => {
@@ -77,7 +77,7 @@ describe('API tests', () => {
       .end((err, res) => {
         expect(findStub).to.have.been.calledOnce;
         expect(res).to.have.status(200);
-        expect(res.body).to.be.an('array')
+        expect(res.body).to.be.an('array');
         done();
       });
     });
@@ -90,7 +90,7 @@ describe('API tests', () => {
       .end((err, res) => {
         expect(findStub).to.have.been.calledOnce;
         expect(res).to.have.status(200);
-        expect(res.body).to.be.an('array')
+        expect(res.body).to.be.an('array');
         done();
       });
     });
@@ -103,26 +103,55 @@ describe('API tests', () => {
       .post('/generate')
       .send(generateRequest)
       .end((err, res) => {
-        expect(res).to.have.status(200)
+        expect(res).to.have.status(200);
         expect(res.body).to.be.an('array');
-        expect(res.type).to.equal('application/json')
+        expect(res.type).to.equal('application/json');
         done();
       });
     });
   });
 
   context('/createTweet', () => {
-    it('should POST tweet to twitter', (done) => {
-      //sampleTweet.tweet_id = '';
-      sandbox.stub(Twit.prototype, 'post').resolves({data: { id_str: '123', created_at: Date(2023, 7, 26, 12, 0, 0, 0)}})
+    it('should respond with status 400 when tweet id is missing', (done) => {
+      delete sampleTweet.tweet._id;
 
       chai.request(server)
       .post('/createTweet')
       .send(sampleTweet)
       .end((err, res) => {
-        expect(res).to.have.status(200)
-        done()
+        expect(res).to.have.status(400);
+        expect(res.text).to.equal('{"error":"Missing tweet id"}');
+        done();
+      });
+    });
+
+    it('should respond with status 400 when tweet text is missing', (done) => {
+      delete sampleTweet.tweet.tweet;
+
+      chai.request(server)
+      .post('/createTweet')
+      .send(sampleTweet)
+      .end((err, res) => {
+        expect(res).to.have.status(400);
+        expect(res.text).to.equal('{"error":"Missing tweet text"}');
+        done();
       })
     })
-  })
+
+    it('should POST tweet to twitter', (done) => {
+      sandbox.stub(Twit.prototype, 'post').resolves({data: { id_str: '123', created_at: Date(2023, 7, 26, 12, 0, 0, 0)}});
+
+      chai.request(server)
+      .post('/createTweet')
+      .send(sampleTweet)
+      .end((err, res) => {
+        expect(err).to.be.null;
+        expect(res).to.have.status(200);
+        expect(res.body).to.be.an('object');
+        expect(res.body.tweetId).to.equal('123')
+        expect(res).to.be.json;
+        done();
+      });
+    });
+  });
 })
