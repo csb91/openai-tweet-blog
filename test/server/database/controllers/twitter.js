@@ -84,7 +84,7 @@ describe('Twitter controller', () => {
       sinon.restore();
     })
 
-    it('should check for an error to eventually be thrown when the tweet id is missing', async () => {
+    it('should check for a status 400 and error message tweet id is missing', async () => {
       request.body.tweet.tweet = 'test tweet';
 
       await sendTweet(request, response);
@@ -93,7 +93,7 @@ describe('Twitter controller', () => {
       expect(response.json).to.have.been.calledWith({error: 'Missing tweet id'});
     })
 
-    it('should check for an error to eventually be thrown when the tweet text is missing', async () => {
+    it('should check for a status 400 and error message when the tweet text is missing', async () => {
       request.body.tweet._id = '123';
 
       await sendTweet(request, response);
