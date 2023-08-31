@@ -10,6 +10,7 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export const validateInput = (req) => {
+  console.log('a',req.body)
   return new Promise((resolve, reject) => {
     if (!req.body.model || !req.body.prompt || !req.body.numberTweets || !req.body.temperature || !req.body.max_tokens) {
       reject(new Error('Missing required input parameter'));
@@ -20,6 +21,7 @@ export const validateInput = (req) => {
 }
 
 export const generateTweetsWithAPI =  (req) => {
+  console.log('b', req.body)
   const { model, temperature, max_tokens } = req.body;
   let prompt =
   `
@@ -34,13 +36,18 @@ export const generateTweetsWithAPI =  (req) => {
     temperature,
     max_tokens
   })
-  .then(results => results.data.choices[0].text.slice(1).split('\n'))
+  .then(results => {
+    console.log(results.data.choices[0].text.slice(1).split('\n'))
+    return results.data.choices[0].text.slice(1).split('\n')
+  })
   .catch(err => {
+    console.log('Are we here??')
     return Promise.reject(new Error('An error occurred while generating tweets with openAI API'));
   });
 }
 
 export const findTweetInDb = (tweet) => {
+  console.log('c', tweet)
   return Tweet.find({
     tweet: encodeEmojis(tweet)
   })
@@ -50,16 +57,19 @@ export const findTweetInDb = (tweet) => {
 }
 
 export const createNewTweet = (tweet) => {
+  console.log('d',tweet)
   return Tweet.create({
-    tweet: item.slice(3),
+    tweet: tweet,
     created_date: new Date()
   })
+  .then(res => console.log('asdfdf', res))
   .catch(err => {
     return Promise.reject(new Error('An error occurred while generating tweets with openAI API'));
   })
 }
 
 export const saveSingleTweetToDb = (tweet) => {
+  console.log('e',tweet)
   return findTweetInDb(tweet)
     .then((result) => {
       if (!result.length) {
@@ -69,17 +79,26 @@ export const saveSingleTweetToDb = (tweet) => {
 }
 
 export const saveTweetsToDb = (tweetArray) => {
+  console.log('f', tweetArray)
   let promises = tweetArray.map((item) => saveSingleTweetToDb(item.slice(3)));
 
   return Promise.all(promises);
 }
 
 export const generateTweets = (req, res) => {
+  console.log(req.body)
   return validateInput(req)
   .then(() => generateTweetsWithAPI(req))
-  .then(tweetArray => saveTweetsToDb(tweetArray))
-  .then(() => Tweet.find())
-  .then((dbTweets) => res.send(dbTweets))
+  .then(tweetArray => {
+    console.log(tweetArray)
+    return saveTweetsToDb(tweetArray)
+  })
+  .then(() => {
+    console.log('ere')
+    return Tweet.find()})
+  .then((dbTweets) => {
+    console.log('dbTWEEETS', dbTweets)
+    res.send(dbTweets)})
   .catch(err => {
     res.status(500).json({error: 'Error occurred while generating tweets'})
   });
