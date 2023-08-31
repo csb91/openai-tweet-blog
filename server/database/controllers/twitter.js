@@ -76,7 +76,8 @@ export const removeTweetFromDb = (req, res) => {
   let dbTweetId = req.body.tweet._id;
 
   if (!dbTweetId) {
-    return Promise.reject(new Error('Missing tweet id'));
+    res.status(400).json({error: 'Missing tweet id'});
+    return;
   }
 
   return Tweet.deleteOne({_id: dbTweetId})
