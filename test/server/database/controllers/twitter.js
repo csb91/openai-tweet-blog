@@ -187,19 +187,11 @@ describe('Twitter controller', () => {
   })
 
   context('removeTweetFromDb', () => {
-    it('should check for an id using return', () => {
-      return removeTweetFromDb(request, response)
-      .then((result) => {
-        throw new Error('unexpected success');
-      })
-      .catch((err) => {
-        expect(err).to.be.instanceof(Error);
-        expect(err.message).to.equal('Missing tweet id');
-      });
-    })
+    it('should check for a status 400 and error message when missing tweet id', async () => {
+      await removeTweetFromDb(request, response);
 
-    it('should check for an error to be thrown eventually', () => {
-      return expect(removeTweetFromDb(request, response)).to.be.eventually.rejectedWith('Missing tweet id');
+      expect(response.status).to.have.been.calledWith(400);
+      expect(response.json).to.have.been.calledWith({error: 'Missing tweet id'});
     })
 
     it('should call removeTweetFromDb', async () => {
