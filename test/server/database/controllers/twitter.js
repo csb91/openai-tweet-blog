@@ -155,15 +155,20 @@ describe('Twitter controller', () => {
       expect(findOneAndUpdateStub).to.have.been.calledWith({_id: '123'});
     })
 
-    it('should check for an error to be thrown eventually when twitter tweet id is missing', () => {
+    it('should check for a status 400 and error message when twitter tweet id is missing', async () => {
+      await deleteTweet(request, response);
 
-      return expect(deleteTweet(request, response)).to.be.eventually.rejectedWith('Missing twitter tweet id');
+      expect(response.status).to.have.been.calledWith(400);
+      expect(response.json).to.have.been.calledWith({error: 'Missing twitter tweet id'});
     })
 
-    it('should check for an error to be thrown eventually when the tweet id is missing', () => {
+    it('should check for a status 400 and error message when the tweet id is missing', async () => {
       request.body.tweet.tweetId = '123';
 
-      return expect(deleteTweet(request, response)).to.be.eventually.rejectedWith('Missing tweet id');
+      await deleteTweet(request, response);
+
+      expect(response.status).to.have.been.calledWith(400);
+      expect(response.json).to.have.been.calledWith({error: 'Missing tweet id'})
     })
 
     it('should successfully call findOneAndUpdate', async () => {
