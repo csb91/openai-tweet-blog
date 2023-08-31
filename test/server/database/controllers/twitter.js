@@ -84,16 +84,22 @@ describe('Twitter controller', () => {
       sinon.restore();
     })
 
-    it('should check for an error to eventually be thrown when the tweet id is missing', () => {
+    it('should check for an error to eventually be thrown when the tweet id is missing', async () => {
       request.body.tweet.tweet = 'test tweet';
 
-      return expect(sendTweet(request, response)).to.be.eventually.rejectedWith('Missing tweet id');
+      await sendTweet(request, response);
+
+      expect(response.status).to.have.been.calledWith(400);
+      expect(response.json).to.have.been.calledWith({error: 'Missing tweet id'});
     })
 
-    it('should check for an error to eventually be thrown when the tweet text is missing', () => {
+    it('should check for an error to eventually be thrown when the tweet text is missing', async () => {
       request.body.tweet._id = '123';
 
-      return expect(sendTweet(request, response)).to.be.eventually.rejectedWith('Missing tweet text');
+      await sendTweet(request, response);
+
+      expect(response.status).to.have.been.calledWith(400);
+      expect(response.json).to.have.been.calledWith({error: 'Missing tweet text'});
     })
 
     it('should successfully call findOneAndUpdate', async () => {
